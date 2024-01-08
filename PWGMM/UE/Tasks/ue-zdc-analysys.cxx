@@ -36,7 +36,7 @@ using namespace o2::aod::track;
 using namespace o2::aod::evsel;
 
 using BCsRun3 = soa::Join<aod::BCs, aod::Timestamps, aod::BcSels, aod::Run3MatchedToBCSparse>;
-//using BCsWithRun3Matchings = soa::Join<aod::BCs, aod::Timestamps, aod::Run3MatchedToBCSparse>;
+// using BCsWithRun3Matchings = soa::Join<aod::BCs, aod::Timestamps, aod::Run3MatchedToBCSparse>;
 using ColEvSels = soa::Join<aod::Collisions, aod::EvSels>;
 
 struct ZDCAnalysis {
@@ -52,16 +52,17 @@ struct ZDCAnalysis {
   Configurable<float> MaxZN{"MaxZN", 4099.5, "Max ZN signal"};
   Configurable<float> MaxZP{"MaxZP", 3099.5, "Max ZP signal"};
   Configurable<float> MaxZEM{"MaxZEM", 3099.5, "Max ZEM signal"};
-  Configurable<float> tdcZNmincut{"tdcZNmincut", -4.0, "Min ZN TDC cut"};  
+  Configurable<float> tdcZNmincut{"tdcZNmincut", -4.0, "Min ZN TDC cut"};
   Configurable<float> tdcZNmaxcut{"tdcZNmaxcut", -4.0, "Max ZN TDC cut"};
-  Configurable<float> tdcZPmincut{"tdcZPmincut", -4.0, "Min ZP TDC cut"};  
+  Configurable<float> tdcZPmincut{"tdcZPmincut", -4.0, "Min ZP TDC cut"};
   Configurable<float> tdcZPmaxcut{"tdcZPmaxcut", -4.0, "Max ZP TDC cut"};
   //
   Configurable<float> MaxMultFV0{"MaxMultFV0", 3000, "Max FV0 signal"};
   Configurable<float> MaxMultFT0{"MaxMultFT0", 3000, "Max FT0 signal"};
   Configurable<float> MaxMultFDD{"MaxMultFDD", 80000, "Max FDD signal"};
-  
-  HistogramRegistry registry{"Histos", {}, OutputObjHandlingPolicy::AnalysisObject};;
+
+  HistogramRegistry registry{"Histos", {}, OutputObjHandlingPolicy::AnalysisObject};
+  ;
 
   void init(InitContext const&)
   {
@@ -192,26 +193,34 @@ struct ZDCAnalysis {
     BCsRun3 const& bcs,
     aod::Zdcs const& zdcs)
   {
-    // collision-based event selection 
+    // collision-based event selection
     for (auto& collision : cols) {
       const auto& foundBC = collision.foundBC_as<BCsRun3>();
-      if(foundBC.has_zdc()) {
-        if(TDCcut){
-          if((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut)) registry.get<TH1>(HIST("ZNAcoll"))->Fill(foundBC.zdc().amplitudeZNA());
-          if((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut)) registry.get<TH1>(HIST("ZNCcoll"))->Fill(foundBC.zdc().amplitudeZNC());
-          if((foundBC.zdc().timeZPA() >= tdcZPmincut) && (foundBC.zdc().timeZPA() <= tdcZPmaxcut)) registry.get<TH1>(HIST("ZPAcoll"))->Fill(foundBC.zdc().amplitudeZPA());
-          if((foundBC.zdc().timeZPC() >= tdcZPmincut) && (foundBC.zdc().timeZPC() <= tdcZPmaxcut)) registry.get<TH1>(HIST("ZPCcoll"))->Fill(foundBC.zdc().amplitudeZPC());
-          if(((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut)) && 
-           ((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut))) registry.get<TH2>(HIST("ZNvsZEMcoll"))->Fill(foundBC.zdc().amplitudeZEM1() + foundBC.zdc().amplitudeZEM2(), foundBC.zdc().amplitudeZNA() + foundBC.zdc().amplitudeZNC());
-          if(((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut)) && 
-             ((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut))) registry.get<TH2>(HIST("ZNAvsZNCcoll"))->Fill(foundBC.zdc().amplitudeZNC(), foundBC.zdc().amplitudeZNA());
-          if(((foundBC.zdc().timeZPC() >= tdcZPmincut) && (foundBC.zdc().timeZPC() <= tdcZPmaxcut)) && 
-             ((foundBC.zdc().timeZPA() >= tdcZPmincut) && (foundBC.zdc().timeZPA() <= tdcZPmaxcut))) registry.get<TH2>(HIST("ZPAvsZPCcoll"))->Fill(foundBC.zdc().amplitudeZPC(), foundBC.zdc().amplitudeZPA());
-          if((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut)) registry.get<TH2>(HIST("ZNAvsZPAcoll"))->Fill(foundBC.zdc().amplitudeZPA(), foundBC.zdc().amplitudeZNA());
-          if((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut)) registry.get<TH2>(HIST("ZNCvsZPCcoll"))->Fill(foundBC.zdc().amplitudeZPC(), foundBC.zdc().amplitudeZNC());
+      if (foundBC.has_zdc()) {
+        if (TDCcut) {
+          if ((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut))
+            registry.get<TH1>(HIST("ZNAcoll"))->Fill(foundBC.zdc().amplitudeZNA());
+          if ((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut))
+            registry.get<TH1>(HIST("ZNCcoll"))->Fill(foundBC.zdc().amplitudeZNC());
+          if ((foundBC.zdc().timeZPA() >= tdcZPmincut) && (foundBC.zdc().timeZPA() <= tdcZPmaxcut))
+            registry.get<TH1>(HIST("ZPAcoll"))->Fill(foundBC.zdc().amplitudeZPA());
+          if ((foundBC.zdc().timeZPC() >= tdcZPmincut) && (foundBC.zdc().timeZPC() <= tdcZPmaxcut))
+            registry.get<TH1>(HIST("ZPCcoll"))->Fill(foundBC.zdc().amplitudeZPC());
+          if (((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut)) &&
+              ((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut)))
+            registry.get<TH2>(HIST("ZNvsZEMcoll"))->Fill(foundBC.zdc().amplitudeZEM1() + foundBC.zdc().amplitudeZEM2(), foundBC.zdc().amplitudeZNA() + foundBC.zdc().amplitudeZNC());
+          if (((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut)) &&
+              ((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut)))
+            registry.get<TH2>(HIST("ZNAvsZNCcoll"))->Fill(foundBC.zdc().amplitudeZNC(), foundBC.zdc().amplitudeZNA());
+          if (((foundBC.zdc().timeZPC() >= tdcZPmincut) && (foundBC.zdc().timeZPC() <= tdcZPmaxcut)) &&
+              ((foundBC.zdc().timeZPA() >= tdcZPmincut) && (foundBC.zdc().timeZPA() <= tdcZPmaxcut)))
+            registry.get<TH2>(HIST("ZPAvsZPCcoll"))->Fill(foundBC.zdc().amplitudeZPC(), foundBC.zdc().amplitudeZPA());
+          if ((foundBC.zdc().timeZNA() >= tdcZNmincut) && (foundBC.zdc().timeZNA() <= tdcZNmaxcut))
+            registry.get<TH2>(HIST("ZNAvsZPAcoll"))->Fill(foundBC.zdc().amplitudeZPA(), foundBC.zdc().amplitudeZNA());
+          if ((foundBC.zdc().timeZNC() >= tdcZNmincut) && (foundBC.zdc().timeZNC() <= tdcZNmaxcut))
+            registry.get<TH2>(HIST("ZNCvsZPCcoll"))->Fill(foundBC.zdc().amplitudeZPC(), foundBC.zdc().amplitudeZNC());
           //
-        }
-        else {
+        } else {
           registry.get<TH1>(HIST("ZNAcoll"))->Fill(foundBC.zdc().amplitudeZNA());
           registry.get<TH1>(HIST("ZNCcoll"))->Fill(foundBC.zdc().amplitudeZNC());
           registry.get<TH1>(HIST("ZPAcoll"))->Fill(foundBC.zdc().amplitudeZPA());
@@ -231,7 +240,6 @@ struct ZDCAnalysis {
         registry.get<TH2>(HIST("ZPAvstdccoll"))->Fill(foundBC.zdc().timeZPA(), foundBC.zdc().amplitudeZPA());
         registry.get<TH2>(HIST("ZEM1vstdccoll"))->Fill(foundBC.zdc().timeZEM1(), foundBC.zdc().amplitudeZEM1());
         registry.get<TH2>(HIST("ZEM2vstdccoll"))->Fill(foundBC.zdc().timeZEM2(), foundBC.zdc().amplitudeZEM2());
-
       }
     }
   }
