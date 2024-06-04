@@ -134,7 +134,7 @@ struct ZDCAnalysis {
   }
 
   void processZdcAuto(aod::Zdc const& zdc)
-  { 
+  {
     auto aZNA = zdc.amplitudeZNA();
     auto aZNC = zdc.amplitudeZNC();
     auto aZPA = zdc.amplitudeZPA();
@@ -194,7 +194,7 @@ struct ZDCAnalysis {
         registry.get<TH1>(HIST("ZPCbc"))->Fill(aZPC);
         registry.get<TH1>(HIST("ZEM1bc"))->Fill(aZEM1);
         registry.get<TH1>(HIST("ZEM2bc"))->Fill(aZEM2);
-        registry.get<TH2>(HIST("ZNvsZEMbc"))->Fill(aZEM1 + aZEM2, aZNA+aZNC);
+        registry.get<TH2>(HIST("ZNvsZEMbc"))->Fill(aZEM1 + aZEM2, aZNA + aZNC);
         registry.get<TH2>(HIST("ZNAvsZNCbc"))->Fill(aZNC, aZNA);
         registry.get<TH2>(HIST("ZPAvsZPCbc"))->Fill(aZPC, aZPA);
         registry.get<TH2>(HIST("ZNAvsZPAbc"))->Fill(aZPA, aZNA);
@@ -227,18 +227,24 @@ struct ZDCAnalysis {
         auto tZPC = zdcread.timeZPC();
         //
         if (TDCcut) {
-          if ((tZNA >= tdcZNmincut) && (tZNA <= tdcZNmaxcut)) registry.get<TH1>(HIST("ZNAcoll"))->Fill(aZNA);
-          if ((tZNC >= tdcZNmincut) && (tZNC <= tdcZNmaxcut)) registry.get<TH1>(HIST("ZNCcoll"))->Fill(aZNC);
-          if ((tZPA >= tdcZPmincut) && (tZPA <= tdcZPmaxcut)) registry.get<TH1>(HIST("ZPAcoll"))->Fill(aZPA);
-          if ((tZPC >= tdcZPmincut) && (tZPC <= tdcZPmaxcut)) registry.get<TH1>(HIST("ZPCcoll"))->Fill(aZPC);
+          if ((tZNA >= tdcZNmincut) && (tZNA <= tdcZNmaxcut))
+            registry.get<TH1>(HIST("ZNAcoll"))->Fill(aZNA);
+          if ((tZNC >= tdcZNmincut) && (tZNC <= tdcZNmaxcut))
+            registry.get<TH1>(HIST("ZNCcoll"))->Fill(aZNC);
+          if ((tZPA >= tdcZPmincut) && (tZPA <= tdcZPmaxcut))
+            registry.get<TH1>(HIST("ZPAcoll"))->Fill(aZPA);
+          if ((tZPC >= tdcZPmincut) && (tZPC <= tdcZPmaxcut))
+            registry.get<TH1>(HIST("ZPCcoll"))->Fill(aZPC);
           if (((tZNC >= tdcZNmincut) && (tZNC <= tdcZNmaxcut)) && ((tZNA >= tdcZNmincut) && (tZNA <= tdcZNmaxcut)))
             registry.get<TH2>(HIST("ZNvsZEMcoll"))->Fill(aZEM1 + aZEM2, aZNA + aZNC);
           if (((tZNC >= tdcZNmincut) && (tZNC <= tdcZNmaxcut)) && ((tZNA >= tdcZNmincut) && (tZNA <= tdcZNmaxcut)))
             registry.get<TH2>(HIST("ZNAvsZNCcoll"))->Fill(aZNC, aZNA);
           if (((tZPC >= tdcZPmincut) && (tZPC <= tdcZPmaxcut)) && ((tZPA >= tdcZPmincut) && (tZPA <= tdcZPmaxcut)))
             registry.get<TH2>(HIST("ZPAvsZPCcoll"))->Fill(aZPC, aZPA);
-          if ((tZNA >= tdcZNmincut) && (tZNA <= tdcZNmaxcut)) registry.get<TH2>(HIST("ZNAvsZPAcoll"))->Fill(aZPA, aZNA);
-          if ((tZNC >= tdcZNmincut) && (tZNC <= tdcZNmaxcut)) registry.get<TH2>(HIST("ZNCvsZPCcoll"))->Fill(aZPC, aZNC);
+          if ((tZNA >= tdcZNmincut) && (tZNA <= tdcZNmaxcut))
+            registry.get<TH2>(HIST("ZNAvsZPAcoll"))->Fill(aZPA, aZNA);
+          if ((tZNC >= tdcZNmincut) && (tZNC <= tdcZNmaxcut))
+            registry.get<TH2>(HIST("ZNCvsZPCcoll"))->Fill(aZPC, aZNC);
           //
         } else {
           registry.get<TH1>(HIST("ZNAcoll"))->Fill(aZNA);
@@ -261,10 +267,10 @@ struct ZDCAnalysis {
         registry.get<TH2>(HIST("ZEM1vstdccoll"))->Fill(zdcread.timeZEM1(), aZEM1);
         registry.get<TH2>(HIST("ZEM2vstdccoll"))->Fill(zdcread.timeZEM2(), aZEM2);
         //
-        registry.get<TH2>(HIST("debunch"))->Fill(tZNA-tZNC, tZNA+tZNC);
+        registry.get<TH2>(HIST("debunch"))->Fill(tZNA - tZNC, tZNA + tZNC);
         //
         // Calculating centroid over ZNA and ZNC
-        //const float beamEne = 5.36/2.;
+        // const float beamEne = 5.36/2.;
         const float x[4] = {-1.75, 1.75, -1.75, 1.75};
         const float y[4] = {-1.75, -1.75, 1.75, 1.75};
         const float alpha = 0.395;
@@ -277,32 +283,34 @@ struct ZDCAnalysis {
         auto zncC = zdcread.energyCommonZNC();
         auto znaC = zdcread.energyCommonZNA();
         //
-        for(int i=0; i<4; i++){
-          if(zncTower[i]>0.) {
+        for (int i = 0; i < 4; i++) {
++         if (zncTower[i] > 0.) {
             float wZNC = std::pow(zncTower[i], alpha);
-            numXZNC += x[i]*wZNC;
-            numYZNC += y[i]*wZNC;
+            numXZNC += x[i] * wZNC;
+            numYZNC += y[i] * wZNC;
             denZNC += wZNC;
           }
-          if(znaTower[i]>0.) {
+          if (znaTower[i] > 0.) {
             float wZNA = std::pow(znaTower[i], alpha);
-            numXZNA += x[i]*wZNA;
-            numYZNA += y[i]*wZNA;
+            numXZNA += x[i] * wZNA;
+            numYZNA += y[i] * wZNA;
             denZNA += wZNA;
           }
         }
         //
-        if(denZNC!=0){
-          centrZNC[0] = numXZNC/denZNC;
-          centrZNC[1] = numYZNC/denZNC;
+        if (denZNC != 0){
+          centrZNC[0] = numXZNC / denZNC;
+          centrZNC[1] = numYZNC / denZNC;
         }
-        else centrZNC[0] = centrZNC[1] = 999.;
+        else 
+          centrZNC[0] = centrZNC[1] = 999.;
         //
-        if(denZNA!=0){
-          centrZNA[0] = -numXZNA/denZNA;
-          centrZNA[1] = numYZNA/denZNA;
+        if (denZNA != 0){
+          centrZNA[0] = -numXZNA / denZNA;
+          centrZNA[1] = numYZNA / denZNA;
         }
-        else centrZNA[0] = centrZNA[1] = 999.;
+        else 
+          centrZNA[0] = centrZNA[1] = 999.;
         //
         registry.get<TH2>(HIST("centroidZNA"))->Fill(centrZNA[0], centrZNA[1], znaC);
         registry.get<TH2>(HIST("centroidZNC"))->Fill(centrZNC[0], centrZNC[1], zncC);
