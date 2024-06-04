@@ -284,7 +284,8 @@ struct ZDCAnalysis {
         auto znaC = zdcread.energyCommonZNA();
         //
         for (int i = 0; i < 4; i++) {
-+         if (zncTower[i] > 0.) {
+          +if (zncTower[i] > 0.)
+          {
             float wZNC = std::pow(zncTower[i], alpha);
             numXZNC += x[i] * wZNC;
             numYZNC += y[i] * wZNC;
@@ -298,18 +299,16 @@ struct ZDCAnalysis {
           }
         }
         //
-        if (denZNC != 0){
+        if (denZNC != 0) {
           centrZNC[0] = numXZNC / denZNC;
           centrZNC[1] = numYZNC / denZNC;
-        }
-        else 
+        } else
           centrZNC[0] = centrZNC[1] = 999.;
         //
-        if (denZNA != 0){
+        if (denZNA != 0) {
           centrZNA[0] = -numXZNA / denZNA;
           centrZNA[1] = numYZNA / denZNA;
-        }
-        else 
+        } else
           centrZNA[0] = centrZNA[1] = 999.;
         //
         registry.get<TH2>(HIST("centroidZNA"))->Fill(centrZNA[0], centrZNA[1], znaC);
