@@ -96,7 +96,7 @@ struct FilterCF {
 =======
     bool isMultSelected = false;
     if (collision.multiplicity() >= cfgMinMultiplicity)
-        isMultSelected = true;
+      isMultSelected = true;
 
 >>>>>>> 4be4007e (Updating to allow for a minimum cut value in multiplicity)
     if (cfgTrigger == 0) {
