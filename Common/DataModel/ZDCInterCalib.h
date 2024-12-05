@@ -17,6 +17,8 @@ namespace o2::aod
 {
 namespace znoutput
 {
+DECLARE_SOA_COLUMN(tdcZNA, ZNAtime, float); //! ZNA tdc value
+DECLARE_SOA_COLUMN(tdcZNC, ZNCtime, float); //! ZNC tdc value
 DECLARE_SOA_COLUMN(pmcZNA, ZNAcommonPM, float); //! PMC ZNA
 DECLARE_SOA_COLUMN(pm1ZNA, ZNAPM1, float);      //! PM1 ZNA
 DECLARE_SOA_COLUMN(pm2ZNA, ZNAPM2, float);      //! PM2 ZNA
@@ -31,6 +33,8 @@ DECLARE_SOA_COLUMN(pm4ZNC, ZNCPM4, float);      //! PM4 ZNC
 } // namespace znoutput
 
 DECLARE_SOA_TABLE(ZDCInterCalib, "AOD", "ZDCIC", o2::soa::Index<>,
+                  znoutput::tdcZNA,
+                  znoutput::tdcZNC,
                   znoutput::pmcZNA,
                   znoutput::pm1ZNA,
                   znoutput::pm2ZNA,

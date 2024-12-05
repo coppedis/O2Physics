@@ -148,7 +148,7 @@ struct zdcInterCalib {
           registry.get<TH1>(HIST("ZNAsumq"))->Fill(sumZNA);
         }
         if (isZNAhit || isZNChit)
-          zTab(pmcZNA, pmqZNA[0], pmqZNA[1], pmqZNA[2], pmqZNA[3], pmcZNC, pmqZNC[0], pmqZNC[1], pmqZNC[2], pmqZNC[3]);
+          zTab(tdcZNA, tdcZNC, pmcZNA, pmqZNA[0], pmqZNA[1], pmqZNA[2], pmqZNA[3], pmcZNC, pmqZNC[0], pmqZNC[1], pmqZNC[2], pmqZNC[3]);
       }
     }
   }
