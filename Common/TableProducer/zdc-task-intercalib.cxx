@@ -50,6 +50,9 @@ struct zdcInterCalib {
   //
   Configurable<int> nBins{"nBins", 400, "n bins"};
   Configurable<float> MaxZN{"MaxZN", 399.5, "Max ZN signal"};
+  Configurable<bool> TDCcut{"TDCcut", false, "Flag for TDC cut"};
+  Configurable<float> tdcZNmincut{"tdcZNmincut", -3.0, "Min ZN TDC cut"};
+  Configurable<float> tdcZNmaxcut{"tdcZNmaxcut", -3.0, "Max ZN TDC cut"};
   //
   HistogramRegistry registry{"Histos", {}, OutputObjHandlingPolicy::AnalysisObject};
 
@@ -83,8 +86,8 @@ struct zdcInterCalib {
         double pmcZNC = zdc.energyCommonZNC();
         double pmcZNA = zdc.energyCommonZNA();
         //
-        // double tdcZNC = zdc.zdc.timeZNC();
-        // double tdcZNA = zdc.zdc.timeZNA();
+        double tdcZNC = zdc.timeZNC();
+        double tdcZNA = zdc.timeZNA();
         //
         bool isZNChit = true, isZNAhit = true;
         if (pmcZNC < kVeryNegative) {
@@ -116,12 +119,24 @@ struct zdcInterCalib {
             pmqZNC[it] = (zdc.energySectorZNC())[it];
             sumZNC += pmqZNC[it];
           }
-          registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNC);
-          registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNC[0]);
-          registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNC[1]);
-          registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNC[2]);
-          registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNC[3]);
-          registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNC);
+          if (TDCcut) {
+            if ((tdcZNC >= tdcZNmincut) && (tdcZNC <= tdcZNmaxcut)) {
+              registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNC);
+              registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNC[0]);
+              registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNC[1]);
+              registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNC[2]);
+              registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNC[3]);
+              registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNC);
+            }
+          }
+          else {
+            registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNC);
+            registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNC[0]);
+            registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNC[1]);
+            registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNC[2]);
+            registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNC[3]);
+            registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNC);
+          }
         }
         if (isZNAhit) {
           for (int it = 0; it < 4; it++) {
@@ -129,12 +144,24 @@ struct zdcInterCalib {
             sumZNA += pmqZNA[it];
           }
           //
-          registry.get<TH1>(HIST("ZNApmc"))->Fill(pmcZNA);
-          registry.get<TH1>(HIST("ZNApm1"))->Fill(pmqZNA[0]);
-          registry.get<TH1>(HIST("ZNApm2"))->Fill(pmqZNA[1]);
-          registry.get<TH1>(HIST("ZNApm3"))->Fill(pmqZNA[2]);
-          registry.get<TH1>(HIST("ZNApm4"))->Fill(pmqZNA[3]);
-          registry.get<TH1>(HIST("ZNAsumq"))->Fill(sumZNA);
+          if (TDCcut) {
+            if ((tdcZNA >= tdcZNmincut) && (tdcZNA <= tdcZNmaxcut)) {
+              registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNA);
+              registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNA[0]);
+              registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNA[1]);
+              registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNA[2]);
+              registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNA[3]);
+              registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNA);
+            }
+          }
+          else {
+            registry.get<TH1>(HIST("ZNApmc"))->Fill(pmcZNA);
+            registry.get<TH1>(HIST("ZNApm1"))->Fill(pmqZNA[0]);
+            registry.get<TH1>(HIST("ZNApm2"))->Fill(pmqZNA[1]);
+            registry.get<TH1>(HIST("ZNApm3"))->Fill(pmqZNA[2]);
+            registry.get<TH1>(HIST("ZNApm4"))->Fill(pmqZNA[3]);
+            registry.get<TH1>(HIST("ZNAsumq"))->Fill(sumZNA);
+          }
         }
         if (isZNAhit || isZNChit)
           zTab(pmcZNA, pmqZNA[0], pmqZNA[1], pmqZNA[2], pmqZNA[3], pmcZNC, pmqZNC[0], pmqZNC[1], pmqZNC[2], pmqZNC[3]);
