@@ -30,7 +30,6 @@
 #include "Common/DataModel/ZDCInterCalib.h"
 
 #include "TH1F.h"
-#include "TH2F.h"
 
 using namespace o2;
 using namespace o2::framework;
@@ -89,14 +88,23 @@ struct zdcInterCalib {
         double tdcZNC = zdc.timeZNC();
         double tdcZNA = zdc.timeZNA();
         //
-        bool isZNChit = true, isZNAhit = true;
-        if (pmcZNC < kVeryNegative) {
-          pmcZNC = kVeryNegative;
-          isZNChit = false;
+        bool isZNChit = true;
+        bool isZNAhit = true;
+        if(!TDCcut) {
+          if (pmcZNC < kVeryNegative) {
+            pmcZNC = kVeryNegative;
+            isZNChit = false;
+          }
+          if (pmcZNA < kVeryNegative) {
+            pmcZNA = kVeryNegative;
+            isZNAhit = false;
+          }
         }
-        if (pmcZNA < kVeryNegative) {
-          pmcZNA = kVeryNegative;
-          isZNAhit = false;
+        else {
+          if ((tdcZNC < tdcZNmincut) || (tdcZNC > tdcZNmaxcut))
+            isZNChit = false;
+          if ((tdcZNA < tdcZNmincut) || (tdcZNA > tdcZNmaxcut))
+            isZNAhit = false;
         }
         //
         double sumZNC = 0;
@@ -119,24 +127,12 @@ struct zdcInterCalib {
             pmqZNC[it] = (zdc.energySectorZNC())[it];
             sumZNC += pmqZNC[it];
           }
-          if (TDCcut) {
-            if ((tdcZNC >= tdcZNmincut) && (tdcZNC <= tdcZNmaxcut)) {
-              registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNC);
-              registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNC[0]);
-              registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNC[1]);
-              registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNC[2]);
-              registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNC[3]);
-              registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNC);
-            }
-          }
-          else {
-            registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNC);
-            registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNC[0]);
-            registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNC[1]);
-            registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNC[2]);
-            registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNC[3]);
-            registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNC);
-          }
+          registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNC);
+          registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNC[0]);
+          registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNC[1]);
+          registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNC[2]);
+          registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNC[3]);
+          registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNC);
         }
         if (isZNAhit) {
           for (int it = 0; it < 4; it++) {
@@ -144,24 +140,12 @@ struct zdcInterCalib {
             sumZNA += pmqZNA[it];
           }
           //
-          if (TDCcut) {
-            if ((tdcZNA >= tdcZNmincut) && (tdcZNA <= tdcZNmaxcut)) {
-              registry.get<TH1>(HIST("ZNCpmc"))->Fill(pmcZNA);
-              registry.get<TH1>(HIST("ZNCpm1"))->Fill(pmqZNA[0]);
-              registry.get<TH1>(HIST("ZNCpm2"))->Fill(pmqZNA[1]);
-              registry.get<TH1>(HIST("ZNCpm3"))->Fill(pmqZNA[2]);
-              registry.get<TH1>(HIST("ZNCpm4"))->Fill(pmqZNA[3]);
-              registry.get<TH1>(HIST("ZNCsumq"))->Fill(sumZNA);
-            }
-          }
-          else {
-            registry.get<TH1>(HIST("ZNApmc"))->Fill(pmcZNA);
-            registry.get<TH1>(HIST("ZNApm1"))->Fill(pmqZNA[0]);
-            registry.get<TH1>(HIST("ZNApm2"))->Fill(pmqZNA[1]);
-            registry.get<TH1>(HIST("ZNApm3"))->Fill(pmqZNA[2]);
-            registry.get<TH1>(HIST("ZNApm4"))->Fill(pmqZNA[3]);
-            registry.get<TH1>(HIST("ZNAsumq"))->Fill(sumZNA);
-          }
+          registry.get<TH1>(HIST("ZNApmc"))->Fill(pmcZNA);
+          registry.get<TH1>(HIST("ZNApm1"))->Fill(pmqZNA[0]);
+          registry.get<TH1>(HIST("ZNApm2"))->Fill(pmqZNA[1]);
+          registry.get<TH1>(HIST("ZNApm3"))->Fill(pmqZNA[2]);
+          registry.get<TH1>(HIST("ZNApm4"))->Fill(pmqZNA[3]);
+          registry.get<TH1>(HIST("ZNAsumq"))->Fill(sumZNA);
         }
         if (isZNAhit || isZNChit)
           zTab(pmcZNA, pmqZNA[0], pmqZNA[1], pmqZNA[2], pmqZNA[3], pmcZNC, pmqZNC[0], pmqZNC[1], pmqZNC[2], pmqZNC[3]);
