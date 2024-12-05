@@ -90,7 +90,7 @@ struct zdcInterCalib {
         //
         bool isZNChit = true;
         bool isZNAhit = true;
-        if(!TDCcut) {
+        if (!TDCcut) {
           if (pmcZNC < kVeryNegative) {
             pmcZNC = kVeryNegative;
             isZNChit = false;
@@ -99,8 +99,7 @@ struct zdcInterCalib {
             pmcZNA = kVeryNegative;
             isZNAhit = false;
           }
-        }
-        else {
+        } else {
           if ((tdcZNC < tdcZNmincut) || (tdcZNC > tdcZNmaxcut))
             isZNChit = false;
           if ((tdcZNA < tdcZNmincut) || (tdcZNA > tdcZNmaxcut))

@@ -17,8 +17,8 @@ namespace o2::aod
 {
 namespace znoutput
 {
-DECLARE_SOA_COLUMN(tdcZNA, ZNAtime, float); //! ZNA tdc value
-DECLARE_SOA_COLUMN(tdcZNC, ZNCtime, float); //! ZNC tdc value
+DECLARE_SOA_COLUMN(tdcZNA, ZNAtime, float);     //! ZNA tdc value
+DECLARE_SOA_COLUMN(tdcZNC, ZNCtime, float);     //! ZNC tdc value
 DECLARE_SOA_COLUMN(pmcZNA, ZNAcommonPM, float); //! PMC ZNA
 DECLARE_SOA_COLUMN(pm1ZNA, ZNAPM1, float);      //! PM1 ZNA
 DECLARE_SOA_COLUMN(pm2ZNA, ZNAPM2, float);      //! PM2 ZNA
