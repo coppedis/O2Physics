@@ -8,6 +8,10 @@
 // In applying this license CERN does not waive the privileges and immunities
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
+///
+/// \brief Data model for ZN tower intercalibration
+/// \author chiara.oppedisano@cern.ch
+
 #ifndef COMMON_DATAMODEL_ZDCINTERCALIB_H_
 #define COMMON_DATAMODEL_ZDCINTERCALIB_H_
 
