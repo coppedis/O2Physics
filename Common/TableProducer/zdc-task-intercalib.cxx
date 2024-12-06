@@ -51,7 +51,7 @@ struct zdcInterCalib {
   Configurable<float> MaxZN{"MaxZN", 399.5, "Max ZN signal"};
   Configurable<bool> TDCcut{"TDCcut", false, "Flag for TDC cut"};
   Configurable<float> tdcZNmincut{"tdcZNmincut", -3.0, "Min ZN TDC cut"};
-  Configurable<float> tdcZNmaxcut{"tdcZNmaxcut", -3.0, "Max ZN TDC cut"};
+  Configurable<float> tdcZNmaxcut{"tdcZNmaxcut", 3.0, "Max ZN TDC cut"};
   //
   HistogramRegistry registry{"Histos", {}, OutputObjHandlingPolicy::AnalysisObject};
 
