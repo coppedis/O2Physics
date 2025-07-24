@@ -46,7 +46,7 @@ DECLARE_SOA_COLUMN(ZpcTdc, zpcTdc, float);                 //! Tdc ZPC
 DECLARE_SOA_COLUMN(ZpcAmpl, zpcAmpl, float);               //! amplitude ZPA
 DECLARE_SOA_COLUMN(ZpcPmc, zpcPmc, float);                 //! ADC PmC ZPA
 DECLARE_SOA_COLUMN(Zem1Tdc, zem1Tdc, float);               //! Tdc ZEM1
-DECLARE_SOA_COLUMN(Zem1Ampl, zem1Ampl, float);              //! amplitude ZEM1
+DECLARE_SOA_COLUMN(Zem1Ampl, zem1Ampl, float);             //! amplitude ZEM1
 DECLARE_SOA_COLUMN(Zem2Tdc, zem2Tdc, float);               //! Tdc ZEM2
 DECLARE_SOA_COLUMN(Zem2Ampl, zem2Ampl, float);             //! amplitude ZEM2
 DECLARE_SOA_COLUMN(MultFt0a, multFt0a, float);             //! mult. FIT-A
