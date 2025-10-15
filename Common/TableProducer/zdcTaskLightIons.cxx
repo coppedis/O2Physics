@@ -54,14 +54,14 @@ struct ZdcTaskLightIons {
   Configurable<float> etaRange{"etaRange", 1.0f, "Eta range to consider"};
   Configurable<float> cfgEvSelVtxZ{"cfgEvSelVtxZ", 10, "Event selection: zVtx"};
   Configurable<bool> cfgEvSelSel8{"cfgEvSelSel8", true, "Event selection: sel8"};
-  Configurable<bool> IsApplySameBunchPileup{"IsApplySameBunchPileup", true, "Enable SameBunchPileup cut"};
-  Configurable<bool> IsApplyGoodZvtxFT0vsPV{"IsApplyGoodZvtxFT0vsPV", true, "Enable GoodZvtxFT0vsPV cut"};
-  Configurable<bool> IsApplyVertexITSTPC{"IsApplyVertexITSTPC", true, "Enable VertexITSTPC cut"};
-  Configurable<float> NPVtracksCut{"NPVtracksCut", 1.0f, "Apply extra NPVtracks cut"};
+  Configurable<bool> isApplySameBunchPileup{"isApplySameBunchPileup", true, "Enable SameBunchPileup cut"};
+  Configurable<bool> isApplyGoodZvtxFT0vsPV{"isApplyGoodZvtxFT0vsPV", true, "Enable GoodZvtxFT0vsPV cut"};
+  Configurable<bool> isApplyVertexITSTPC{"isApplyVertexITSTPC", true, "Enable VertexITSTPC cut"};
+  Configurable<float> nPVtracksCut{"nPVtracksCut", 1.0f, "Apply extra nPVtracks cut"};
   Configurable<float> cfgEvSelsMaxOccupancy{"cfgEvSelsMaxOccupancy", 10000, "Event selection: set max occupancy"};
-  Configurable<bool> IsApplyNoCollInTimeRangeStandard{"IsApplyNoCollInTimeRangeStandard", true, "Enable NoCollInTimeRangeStandard cut"};
-  Configurable<bool> IsApplyNoCollInRofStandard{"IsApplyNoCollInRofStandard", true, "Enable NoCollInRofStandard cut"};
-  Configurable<bool> IsApplyFT0CbasedOccupancy{"IsApplyFT0CbasedOccupancy", true, "Enable FT0CbasedOccupancy cut"};
+  Configurable<bool> isApplyNoCollInTimeRangeStandard{"isApplyNoCollInTimeRangeStandard", true, "Enable NoCollInTimeRangeStandard cut"};
+  Configurable<bool> isApplyNoCollInRofStandard{"isApplyNoCollInRofStandard", true, "Enable NoCollInRofStandard cut"};
+  Configurable<bool> isApplyFT0CbasedOccupancy{"isApplyFT0CbasedOccupancy", true, "Enable FT0CbasedOccupancy cut"};
   //
   HistogramRegistry registry{"Histos", {}, OutputObjHandlingPolicy::AnalysisObject};
 
@@ -81,28 +81,28 @@ struct ZdcTaskLightIons {
     x->SetBinLabel(2, "sel8");
     x->SetBinLabel(3, "vtxZ");
     x->SetBinLabel(4, "kNoSameBunchPileup");
-    x->SetBinLabel(5, "kIsGoodZvtxFT0vsPV");
-    x->SetBinLabel(6, "kIsVertexITSTPC");
+    x->SetBinLabel(5, "kisGoodZvtxFT0vsPV");
+    x->SetBinLabel(6, "kisVertexITSTPC");
     x->SetBinLabel(7, "kOccupancy");
-    x->SetBinLabel(8, "kkIsGoodITSLayersAll");
+    x->SetBinLabel(8, "kkisGoodITSLayersAll");
     x->SetBinLabel(9, "NoCollInTimeRangeStandard");
     x->SetBinLabel(10, "NoCollInRofStandard");
   }
 
   template <typename CheckTrack>
-  bool IsTrackSelected(CheckTrack const& track)
+  bool isTrackSelected(CheckTrack const& track)
   {
     if (std::abs(track.eta()) > etaRange) {
       return false;
     }
-    /*if (IsApplyExtraPhiCut && ((track.phi() > 3.07666 && track.phi() < 3.12661) || track.phi() <= 0.03 || track.phi() >= 6.253)) {
+    /*if (isApplyExtraPhiCut && ((track.phi() > 3.07666 && track.phi() < 3.12661) || track.phi() <= 0.03 || track.phi() >= 6.253)) {
       return false;
     }*/
     return true;
   }
 
   template <typename TCollision>
-  bool IsEventSelected(TCollision collision)
+  bool isEventSelected(TCollision collision)
   {
     registry.fill(HIST("EventHist"), 1);
 
@@ -116,17 +116,17 @@ struct ZdcTaskLightIons {
     }
     registry.fill(HIST("EventHist"), 3);
 
-    if (IsApplySameBunchPileup && !collision.selection_bit(o2::aod::evsel::kNoSameBunchPileup)) {
+    if (isApplySameBunchPileup && !collision.selection_bit(o2::aod::evsel::kNoSameBunchPileup)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 4);
 
-    if (IsApplyGoodZvtxFT0vsPV && !collision.selection_bit(o2::aod::evsel::kIsGoodZvtxFT0vsPV)) {
+    if (isApplyGoodZvtxFT0vsPV && !collision.selection_bit(o2::aod::evsel::kisGoodZvtxFT0vsPV)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 5);
 
-    if (IsApplyVertexITSTPC && !collision.selection_bit(o2::aod::evsel::kIsVertexITSTPC)) {
+    if (isApplyVertexITSTPC && !collision.selection_bit(o2::aod::evsel::kisVertexITSTPC)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 6);
@@ -137,17 +137,17 @@ struct ZdcTaskLightIons {
     }
     registry.fill(HIST("EventHist"), 7);
 
-    if (!collision.selection_bit(o2::aod::evsel::kIsGoodITSLayersAll)) {
+    if (!collision.selection_bit(o2::aod::evsel::kisGoodITSLayersAll)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 8);
 
-    if (IsApplyNoCollInTimeRangeStandard && !collision.selection_bit(o2::aod::evsel::kNoCollInTimeRangeStandard)) {
+    if (isApplyNoCollInTimeRangeStandard && !collision.selection_bit(o2::aod::evsel::kNoCollInTimeRangeStandard)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 9);
 
-    if (IsApplyNoCollInRofStandard && !collision.selection_bit(o2::aod::evsel::kNoCollInRofStandard)) {
+    if (isApplyNoCollInRofStandard && !collision.selection_bit(o2::aod::evsel::kNoCollInRofStandard)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 10);
@@ -231,12 +231,12 @@ struct ZdcTaskLightIons {
     for (auto const& collision : cols) {
 
       const auto& foundBC = collision.foundBC_as<BCsRun3>();
-      uint8_t evSelection = IsEventSelected(collision);
+      uint8_t evSelection = isEventSelected(collision);
       auto zv = collision.posZ();
 
       auto nTracks = 0;
-      for (auto& track : tracks) {
-        if (!IsTrackSelected(track)) {
+      for (const auto& track : tracks) {
+        if (!isTrackSelected(track)) {
           continue;
         }
         nTracks++;
