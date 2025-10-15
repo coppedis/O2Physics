@@ -81,10 +81,10 @@ struct ZdcTaskLightIons {
     x->SetBinLabel(2, "sel8");
     x->SetBinLabel(3, "vtxZ");
     x->SetBinLabel(4, "kNoSameBunchPileup");
-    x->SetBinLabel(5, "kisGoodZvtxFT0vsPV");
-    x->SetBinLabel(6, "kisVertexITSTPC");
+    x->SetBinLabel(5, "kIsGoodZvtxFT0vsPV");
+    x->SetBinLabel(6, "kIsVertexITSTPC");
     x->SetBinLabel(7, "kOccupancy");
-    x->SetBinLabel(8, "kkisGoodITSLayersAll");
+    x->SetBinLabel(8, "kIsGoodITSLayersAll");
     x->SetBinLabel(9, "NoCollInTimeRangeStandard");
     x->SetBinLabel(10, "NoCollInRofStandard");
   }
@@ -121,12 +121,12 @@ struct ZdcTaskLightIons {
     }
     registry.fill(HIST("EventHist"), 4);
 
-    if (isApplyGoodZvtxFT0vsPV && !collision.selection_bit(o2::aod::evsel::kisGoodZvtxFT0vsPV)) {
+    if (isApplyGoodZvtxFT0vsPV && !collision.selection_bit(o2::aod::evsel::kIsGoodZvtxFT0vsPV)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 5);
 
-    if (isApplyVertexITSTPC && !collision.selection_bit(o2::aod::evsel::kisVertexITSTPC)) {
+    if (isApplyVertexITSTPC && !collision.selection_bit(o2::aod::evsel::kIsVertexITSTPC)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 6);
@@ -137,7 +137,7 @@ struct ZdcTaskLightIons {
     }
     registry.fill(HIST("EventHist"), 7);
 
-    if (!collision.selection_bit(o2::aod::evsel::kisGoodITSLayersAll)) {
+    if (!collision.selection_bit(o2::aod::evsel::kIsGoodITSLayersAll)) {
       return false;
     }
     registry.fill(HIST("EventHist"), 8);
