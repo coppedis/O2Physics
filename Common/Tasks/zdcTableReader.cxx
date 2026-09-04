@@ -144,6 +144,9 @@ struct ZDCLIAnalysis {
     registry.add("hNpZPAvscentrFT0M", "N_{protons} in ZPA vs FT0M", {HistType::kTH2F, {{{100, 0., 100.}, {12, -0.5, 11.5}}}});
     registry.add("hNpZPCvscentrFT0M", "N_{protons} in ZPC vs FT0M", {HistType::kTH2F, {{{100, 0., 100.}, {12, -0.5, 11.5}}}});
     //
+    registry.add("hNpvsNnZNA", "N_{protons} vs N_{neutrons} in ZNA", {HistType::kTH2F, {{{12, -0.5, 11.5}, {12, -0.5, 11.5}}}});
+    registry.add("hNpvsNnZNC", "N_{protons} vs N_{neutrons} in ZNC", {HistType::kTH2F, {{{12, -0.5, 11.5}, {12, -0.5, 11.5}}}});
+    //
     registry.add("hZNAvstimestamp", "ZNA vs timestamp", {HistType::kTH2F, {{{nBinstStamp, 0., tStampMax}, {nBinsAmpZN, -0.5, MaxZN}}}});
     registry.add("hZNCvstimestamp", "ZNC vs timestamp", {HistType::kTH2F, {{{nBinstStamp, 0., tStampMax}, {nBinsAmpZN, -0.5, MaxZN}}}});
     registry.add("hZPAvstimestamp", "ZPA vs timestamp", {HistType::kTH2F, {{{nBinstStamp, 0., tStampMax}, {nBinsAmpZP, -0.5, MaxZP}}}});
@@ -455,6 +458,8 @@ struct ZDCLIAnalysis {
           registry.get<TH2>(HIST("hNnZNCvscentrFT0M"))->Fill(centrFT0M, znc/2.680);
           registry.get<TH2>(HIST("hNpZPAvscentrFT0M"))->Fill(centrFT0M, zpa/2.680);
           registry.get<TH2>(HIST("hNpZPCvscentrFT0M"))->Fill(centrFT0M, zpc/2.680);
+          registry.get<TH2>(HIST("hNpvsNnZNA"))->Fill(zna/2.680, zpa/2.680);
+          registry.get<TH2>(HIST("hNpvsNnZNC"))->Fill(znc/2.680, zpc/2.680);
         }
       }
     }
