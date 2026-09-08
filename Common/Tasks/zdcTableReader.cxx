@@ -80,7 +80,7 @@ struct ZDCLIAnalysis {
   void init(InitContext const&)
   {
     registry.add("hzvertex", "z vertex; z_vertex (cm); Entries", {HistType::kTH1F, {{200, -20., 20.}}});
-    registry.add("hcounts", "counts; selections; counts", {HistType::kTH1F, {{10, 0., 10.}}});
+    registry.add("hcounts", "counts; selections; counts", {HistType::kTH1F, {{12, 0., 12.}}});
     //
     registry.add("hZNApmc", "ZNA pmc; ZNA amplitude; Entries", {HistType::kTH1F, {{nBinsAmpZN, -0.5, MaxZN}}});
     registry.add("hZPApmc", "ZPA pmc; ZPA amplitude; Entries", {HistType::kTH1F, {{nBinsAmpZP, -0.5, MaxZP}}});
@@ -104,14 +104,18 @@ struct ZDCLIAnalysis {
     registry.add("hZNCamplvsADC", "ZNC amplitude vs. ADC; ZNC ADC; ZNC amplitude", {HistType::kTH2F, {{{nBinsAmpZN, -0.5, 3. * MaxZN}, {nBinsAmpZN, -0.5, MaxZN}}}});
     registry.add("hZPAamplvsADC", "ZPA amplitude vs. ADC; ZPA ADC; ZPA amplitude", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, 3. * MaxZP}, {nBinsAmpZP, -0.5, MaxZP}}}});
     registry.add("hZPCamplvsADC", "ZPC amplitude vs. ADC; ZPC ADC; ZPC amplitude", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, 3. * MaxZP}, {nBinsAmpZP, -0.5, MaxZP}}}});
+    //
     registry.add("hZNvsZEM", "ZN vs ZEM; ZEM; ZNA+ZNC", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, MaxZEM}, {nBinsAmpZN, -0.5, 2. * MaxZN}}}});
+    registry.add("hZNAvsZEM", "ZNA vs ZEM; ZEM; ZNA", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, MaxZEM}, {nBinsAmpZN, -0.5, MaxZN}}}});
+    registry.add("hZNCvsZEM", "ZNC vs ZEM; ZEM; ZNC", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, MaxZEM}, {nBinsAmpZN, -0.5, MaxZN}}}});
+    //
     registry.add("hZNAvsZNC", "ZNA vs ZNC; ZNC; ZNA", {HistType::kTH2F, {{{nBinsAmpZN, -0.5, MaxZN}, {nBinsAmpZN, -0.5, MaxZN}}}});
     registry.add("hZPAvsZPC", "ZPA vs ZPC; ZPC; ZPA", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, MaxZP}, {nBinsAmpZP, -0.5, MaxZP}}}});
     registry.add("hZNAvsZPA", "ZNA vs ZPA; ZPA; ZNA", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, MaxZP}, {nBinsAmpZN, -0.5, MaxZN}}}});
     registry.add("hZNCvsZPC", "ZNC vs ZPC; ZPC; ZNC", {HistType::kTH2F, {{{nBinsAmpZP, -0.5, MaxZP}, {nBinsAmpZN, -0.5, MaxZN}}}});
     //
-    registry.add("hZNCcvsZNCsum", "ZNC PMC vs PMsum; ZNCC ADC; ZNCsum", {HistType::kTH2F, {{{nBinsADC, -0.5, 3. * MaxZN}, {nBinsADC, -0.5, 3. * MaxZN}}}});
-    registry.add("hZNAcvsZNAsum", "ZNA PMC vs PMsum; ZNAsum", {HistType::kTH2F, {{{nBinsADC, -0.5, 3. * MaxZN}, {nBinsADC, -0.5, 3. * MaxZN}}}});
+    registry.add("hZNCcvsZNCsum", "ZNC PMC vs PMsum; ZNCC ADC; ZNC sum", {HistType::kTH2F, {{{nBinsADC, -0.5, 3. * MaxZN}, {nBinsADC, -0.5, 3. * MaxZN}}}});
+    registry.add("hZNAcvsZNAsum", "ZNA PMC vs PMsum; ZNAC ADC; ZNA sum", {HistType::kTH2F, {{{nBinsADC, -0.5, 3. * MaxZN}, {nBinsADC, -0.5, 3. * MaxZN}}}});
     //
     registry.add("hZNCvstdc", "ZNC vs tdc; ZNC TDC (ns); ZNC amplitude", {HistType::kTH2F, {{{480, -13.5, 11.45}, {nBinsAmpZN, -0.5, MaxZN}}}});
     registry.add("hZNAvstdc", "ZNA vs tdc; ZNA TDC (ns); ZNA amplitude", {HistType::kTH2F, {{{480, -13.5, 11.45}, {nBinsAmpZN, -0.5, MaxZN}}}});
@@ -282,10 +286,13 @@ struct ZDCLIAnalysis {
         if(isZPAtdc) registry.get<TH1>(HIST("hcounts"))->Fill(2., 1.);
         if(isZNCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(3., 1.);
         if(isZPCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(4., 1.);
-        if(isZNAtdc || isZPAtdc)  registry.get<TH1>(HIST("hcounts"))->Fill(5., 1.);
-        if(isZNCtdc || isZPCtdc)  registry.get<TH1>(HIST("hcounts"))->Fill(6., 1.);
-        if(isZNAtdc || isZPAtdc || isZNCtdc || isZPCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(7., 1.);
-        if(isZNAtdc && isZNCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(8., 1.);
+        if(isZNAtdc || isZNCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(5., 1.);
+        if(isZNAtdc || isZPAtdc)  registry.get<TH1>(HIST("hcounts"))->Fill(6., 1.);
+        if(isZNCtdc || isZPCtdc)  registry.get<TH1>(HIST("hcounts"))->Fill(7., 1.);
+        if(isZNAtdc || isZPAtdc || isZNCtdc || isZPCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(8., 1.);
+        if(isZNAtdc && isZNCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(9., 1.);
+        if(isZNAtdc && isZPAtdc) registry.get<TH1>(HIST("hcounts"))->Fill(10., 1.);
+        if(isZNCtdc && isZPCtdc) registry.get<TH1>(HIST("hcounts"))->Fill(11., 1.);
 
         if (enCalibZNA > 0.) {
           zna *= enCalibZNA;
@@ -430,6 +437,8 @@ struct ZDCLIAnalysis {
         //
         registry.get<TH1>(HIST("hZEM"))->Fill(zem1 + zem2);
         if (isZNAtdc || isZNCtdc) registry.get<TH2>(HIST("hZNvsZEM"))->Fill(zem1 + zem2, zna + znc);
+        if (isZNAtdc) registry.get<TH2>(HIST("hZNAvsZEM"))->Fill(zem1 + zem2, zna);
+        if (isZNCtdc) registry.get<TH2>(HIST("hZNCvsZEM"))->Fill(zem1 + zem2, znc);
         //
         if (isZNAtdc || isZNCtdc || isZPAtdc || isZPCtdc) registry.get<TH2>(HIST("hZDCCvsA"))->Fill(zna + zpa, znc + zpc);
         //
