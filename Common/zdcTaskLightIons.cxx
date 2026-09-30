@@ -13,13 +13,12 @@
 /// \brief Task for ZDC in light ions
 /// \author chiara.oppedisano@cern.ch
 
-
-#include <CCDB/BasicCCDBManager.h>
 #include "Common/CCDB/EventSelectionParams.h"
 #include "Common/DataModel/Centrality.h"
 #include "Common/DataModel/EventSelection.h"
 #include "Common/DataModel/ZDCLightIons.h"
 
+#include <CCDB/BasicCCDBManager.h>
 #include <DataFormatsParameters/GRPLHCIFData.h>
 #include <Framework/AnalysisDataModel.h>
 #include <Framework/AnalysisHelpers.h>
